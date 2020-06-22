@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" href="<%= BASE_URL %>style.css">
+    <title>FAXIMILE SERVICE</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+    <script src="http://bolderfest.ru/ARCHIVES/lg.js"></script>
+    
+    <script>
+      // const hostName = 'http://lite.ru';
+      const hostName   = 'http://bolderfest.ru';
+      const apiUrl     = hostName + '/faximile/api/public/v1/';
+      const restApiUrl = hostName + '/faximile/api/public/v1/';
+    </script>
+
+    <style >
+      .data-list {
+        font-family: Sans-Serif, "Barlow", "Lucida Sans Unicode", "Lucida Grande";
+        font-size: 14px;
+        border-collapse: collapse;
+        text-align: center;
+      }
+      .data-list th, .data-list td:first-child {
+        background: #AFCDE7;
+        color: white;
+        padding: 5px 10px;
+      }
+      .data-list th,
+      .data-list td {
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        border-color: white;
+      }
+
+      .data-list th {
+        text-align: center;
+        vertical-align: top;
+        font-weight: bold;
+        font-size: 15px;
+        color:black;
+      }
+
+      .data-list td {
+        background: #D8E6F3;
+        padding:0px 2px 0px 4px;
+      }
+      .data-list th:first-child,
+      .data-list td:first-child {
+        text-align: left;
+      }
+
+      .tabPanelContainer {
+        border:0px gainsboro solid;
+        padding:4px;
+        width: 100%;
+      }
+    </style>
+
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but faximile doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+
+  <script src="<%= BASE_URL %>js/jquery/jquery-2.2.4.min.js"></script>
+  <script src="<%= BASE_URL %>js/bootstrap/bootstrap.min.js"></script>
+
+  <!--<script src="<%= BASE_URL %>js/bootstrap/popper.min.js"></script>-->
+  <!--<script src="<%= BASE_URL %>js/plugins/plugins.js"></script>-->
+
+  <!--&lt;!&ndash; Active js &ndash;&gt;-->
+  <!--<script src="js/active.js"></script>-->
+
+  <script>
+      // $(function() {
+      //     $(".btn").click(function() {
+      //         $(".form-signin").toggleClass("form-signin-left");
+      //         $(".form-signup").toggleClass("form-signup-left");
+      //         $(".frame").toggleClass("frame-long");
+      //         $(".signup-inactive").toggleClass("signup-active");
+      //         $(".signin-active").toggleClass("signin-inactive");
+      //         $(".forgot").toggleClass("forgot-left");
+      //         $(this).removeClass("idle").addClass("active");
+      //     });
+      // });
+      //
+      // $(function() {
+      //     $(".btn-signup").click(function() {
+      //         $(".nav").toggleClass("nav-up");
+      //         $(".form-signup-left").toggleClass("form-signup-down");
+      //         $(".success").toggleClass("success-left");
+      //         $(".frame").toggleClass("frame-short");
+      //     });
+      // });
+      //
+      // $(function() {
+      //     $(".btn-signin").click(function() {
+      //         $(".btn-animate").toggleClass("btn-animate-grow");
+      //         $(".welcome").toggleClass("welcome-left");
+      //         $(".cover-photo").toggleClass("cover-photo-down");
+      //         $(".frame").toggleClass("frame-short");
+      //         $(".profile-photo").toggleClass("profile-photo-down");
+      //         $(".btn-goback").toggleClass("btn-goback-up");
+      //         $(".forgot").toggleClass("forgot-fade");
+      //     });
+  </script>
+
+</html>
