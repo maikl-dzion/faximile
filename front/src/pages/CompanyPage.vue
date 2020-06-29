@@ -2,9 +2,7 @@
 
     <top-header page_role="4" >
         <template v-slot:top-menu >
-            <li><router-link to="/chat-page"  >
-                Чат сообщений
-            </router-link></li>
+
         </template>
     </top-header>
 
