@@ -105,6 +105,17 @@ const GlobalPlugin = {
         //     this.getEventBus(this.eventName, this.callBack);
         // },
 
+        htmlElemListRender(selector, fn) {
+            let result = [];
+            let elements = document.querySelectorAll(selector);
+            for(let i in elements) {
+                let elem = elements[i];
+                let r = fn(elem);
+                result.push(r)
+            }
+            return result
+        },
+
         getFaximileData (entity, callback = null, arrName = null) {
           const url = 'documents/' + entity
           this.send(url, 'get').then(response => {

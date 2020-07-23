@@ -1,10 +1,10 @@
 <template>
     <div id="inspire" style="height: 100%">
-        <top-header page_role>
+        <top-header :page_role="store('role')">
             <template v-slot:top-menu>
-                <li>
-                    <router-link to="/page/performer">Документы</router-link>
-                </li>
+                <!--<li>-->
+                <!--<router-link to="/page/performer">Документы</router-link>-->
+                <!--</li>-->
             </template>
         </top-header>
 
@@ -20,53 +20,53 @@
                          @click="getUserPersonalMessages(user, $event)"
                          :id="user.login + user.id"
                          class="user-container">
-                         <div class="user__avatar">
+                        <div class="user__avatar">
                             <!--<img src="../assets/avatar-default.jpg"/>-->
                             <img src="../assets/default-avatar.png"/>
-                         </div>
-                         <div class="user__name">
+                        </div>
+                        <div class="user__name">
                             <div style="font-weight: bold;font-size: 15px;">{{user.username}}</div>
                             <div style="font-style:italic; font-size: 11px;">текст последнего сообщение</div>
-                         </div>
-                         <div class="user__new_count">
-                             <NewMessagesCount v-if="user.id != selectUserId"
-                                 :current_user_id="user.id"
-                             ></NewMessagesCount>
-                         </div>
+                        </div>
+                        <div class="user__new_count">
+                            <NewMessagesCount v-if="user.id != selectUserId"
+                                              :current_user_id="user.id"
+                            ></NewMessagesCount>
+                        </div>
                     </div>
                 </div>
                 <!--- left-users-panel -->
 
-                <div class="center-messages-panel" >
+                <div class="center-messages-panel">
                     <div class="header-panel">Сообщения</div>
                     <div class="messages__send_message">
-                        <div class="file__load_btn">
-                            <v-file-input style="margin:0px;"
-                                          label="File load"></v-file-input>
-                        </div>
-                        <div class="send__message_content">
+                        <!--<div class="file__load_btn">-->
+                            <!--<v-file-input style="margin:0px;"-->
+                                          <!--label="File load"></v-file-input>-->
+                        <!--</div>-->
+                        <div class="send__message_content" style="border: 0px red solid; width: 75%" >
                             <textarea v-model="newMessage.text" class="form-control"
-                              style="margin:0px;" rows="2"></textarea>
+                                      style="margin:0px; border-radius: 0px" rows="2"></textarea>
                         </div>
-                        <div class="send__message_btn">
+                        <div class="send__message_btn" style="border: 0px red solid; width: 25%" >
                             <v-btn @click="sendMesssage()" class="mx-0"
-                                   color="green" style="height:93%; width:100%;color:white;">
-                                <v-icon dark>mdi-send</v-icon>
+                                   color="green" style="height:40px; width:100%; color:white; border-radius: 0px">
+                                   Отправить &ensp;<v-icon dark>mdi-send</v-icon>
                             </v-btn>
                         </div>
                     </div>
 
                     <div v-if="selectUserName" class="selected_user_box">
-                        Сообщения от : {{selectUserName}}
+                         Сообщения от : {{selectUserName}}
                     </div>
 
                     <div class="message-container">
                         <div v-for="(message, i) in personalMessages"
                              style="margin-top: 5px;" :key="message.id">
-                             <div v-if="dateFormatLine(message.create_at)" >
-                                 {{dateLine}}
-                             </div>
-                             <template v-if="message.text">
+                            <div v-if="dateFormatLine(message.create_at)">
+                                {{dateLine}}
+                            </div>
+                            <template v-if="message.text">
                                 <div v-if="message.send_user_id == userId" class="my__message-box">
                                     <div class="message__username">{{message.username}}</div>
                                     <div class="message__text" v-html="message.text"></div>
@@ -77,7 +77,7 @@
                                     <div class="message__text" v-html="message.text"></div>
                                     <div class="message__date">{{message.create_at}}</div>
                                 </div>
-                             </template>
+                            </template>
                         </div>
                     </div>
 
@@ -96,140 +96,142 @@
 </template>
 
 <script>
-export default {
-  props: {
-    source: String
-  },
+    export default {
+        props: {
+            source: String
+        },
 
-  data: () => ({
-    pageTitle: 'Чат сообщений',
-    // drawer: null,
-    userId: 0,
-    selectUserId: 0,
-    selectUserName: '',
-    dateLine : '',
-    selectUser: {},
+        data: () => ({
+            pageTitle: 'Чат сообщений',
+            // drawer: null,
+            userId        : 0,
+            selectUserId  : 0,
+            selectUserName: '',
+            dateLine      : '',
+            selectUser    : {},
 
-    personList: [],
-    messageList: [],
-    messages: [],
-    personalMessages: [],
-    message: {},
+            personList: [],
+            messageList: [],
+            messages: [],
+            personalMessages: [],
+            message: {},
 
-    newMessage: {
-      send_user_id: 0,
-      client_user_id: 0,
-      text: ''
-    }
-  }),
+            newMessage: {
+                send_user_id: 0,
+                client_user_id: 0,
+                text: ''
+            }
+        }),
 
-  computed: {
-    personRender () {
-      return this.personList
-    }
-  },
+        computed: {
+            personRender() {
+                return this.personList
+            }
+        },
 
-  created () {
-    this.checkUserRole()
-    this.userId = this.store('user_id')
-    this.fetchInitData()
-    this.$vuetify.theme.dark = false
-  },
+        created() {
+            this.checkUserRole()
+            this.userId = this.store('user_id')
+            const role = this.store('role')
+            this.fetchInitData()
+            this.$vuetify.theme.dark = false;
 
-  methods: {
+        },
 
-    async fetchInitData () {
-      let apiUrl = 'chat/user/get-chat-users/' + this.userId
-      this.personList = await this.send(apiUrl)
-      this.getNoReadMessages()
-      this.getUserPersonalMessages(this.personList[0])
-    },
+        methods: {
 
-    dateFormatLine (date) {
-        const d = date.split(' ');
-        // debugger;
-        if(this.dateLine != d[0]) {
-          this.dateLine = d[0];
-          return true;
+            async fetchInitData() {
+                let apiUrl = 'chat/user/get-chat-users/' + this.userId
+                this.personList = await this.send(apiUrl)
+                this.getNoReadMessages()
+                this.getUserPersonalMessages(this.personList[0])
+            },
+
+            dateFormatLine(date) {
+                const d = date.split(' ');
+                // debugger;
+                if (this.dateLine != d[0]) {
+                    this.dateLine = d[0];
+                    return true;
+                }
+                return false;
+            },
+
+            getNoReadMessages() {
+                const selectUserId = this.selectUserId
+                const apiUrl = 'chat/user/get-no-read-messages/' + selectUserId + '/' + this.userId
+                this.send(apiUrl).then(this.setCountMessages)
+            },
+
+            setCountMessages(messagesCount) {
+                for (let i in this.personList) {
+                    const user = this.personList[i]
+                    const id = user.id
+                    let count = 0
+                    let oldCount = 0
+                    if (messagesCount[id]) {
+                        count = messagesCount[id]
+                        oldCount = this.personList[i]['m_count']
+                        if (oldCount === count) continue
+                        this.personList[i]['m_count'] = count
+                    }
+                }
+            },
+
+            getUserPersonalMessages(user = null, event = null) {
+                if (!user) return false
+
+                this.selectUser = user
+                this.selectUserId = user.id
+                this.selectUserName = user.username
+
+                let elemId = user.login + user.id
+                let activeClass = 'user__active'
+                let listClass = 'user-container'
+                if (event) this.setActiveElement(event, activeClass)
+                // this.jqSetActiveElement(elemId, activeClass, listClass);
+
+                for (let i in this.personList) {
+                    if (this.personList[i].id === user.id) {
+                        this.personList[i]['m_count'] = ''
+                        break
+                    }
+                }
+
+                const apiUrl = 'chat/user/get-personal-messages/' +
+                    this.userId + '/' + this.selectUserId
+                this.send(apiUrl).then(resp => {
+                    this.personalMessages = resp
+                })
+            },
+
+            sendMesssage() {
+                this.newMessage['send_user_id'] = this.userId
+                this.newMessage['client_user_id'] = this.selectUserId
+                let apiUrl = 'post/chat/user/send-message'
+                this.send(apiUrl, 'post', this.newMessage).then(resp => {
+                    this.newMessage.text = ''
+                    this.saveResponse(resp)
+                    this.getUserPersonalMessages(this.selectUser)
+                })
+            },
+
+            checkUserRole() {
+                const role = this.store('role')
+                if (role === 3) {
+                    this.$router.push('/')
+                }
+            }
+        },
+
+        mounted: function () {
+            setInterval(() => {
+                if (this.selectUserId) {
+                    this.getUserPersonalMessages(this.selectUser)
+                }
+            }, 4000)
         }
-        return false;
-    },
-
-    getNoReadMessages () {
-      const selectUserId = this.selectUserId
-      const apiUrl = 'chat/user/get-no-read-messages/' + selectUserId + '/' + this.userId
-      this.send(apiUrl).then(this.setCountMessages)
-    },
-
-    setCountMessages (messagesCount) {
-      for (let i in this.personList) {
-        const user = this.personList[i]
-        const id = user.id
-        let count = 0
-        let oldCount = 0
-        if (messagesCount[id]) {
-          count = messagesCount[id]
-          oldCount = this.personList[i]['m_count']
-          if (oldCount === count) continue
-          this.personList[i]['m_count'] = count
-        }
-      }
-    },
-
-    getUserPersonalMessages (user = null, event = null) {
-      if (!user) return false
-
-      this.selectUser = user
-      this.selectUserId = user.id
-      this.selectUserName = user.username
-
-      let elemId = user.login + user.id
-      let activeClass = 'user__active'
-      let listClass = 'user-container'
-      if (event) this.setActiveElement(event, activeClass)
-      // this.jqSetActiveElement(elemId, activeClass, listClass);
-
-      for (let i in this.personList) {
-        if (this.personList[i].id === user.id) {
-          this.personList[i]['m_count'] = ''
-          break
-        }
-      }
-
-      const apiUrl = 'chat/user/get-personal-messages/' +
-                      this.userId + '/' + this.selectUserId
-      this.send(apiUrl).then(resp => {
-        this.personalMessages = resp
-      })
-    },
-
-    sendMesssage () {
-      this.newMessage['send_user_id'] = this.userId
-      this.newMessage['client_user_id'] = this.selectUserId
-      let apiUrl = 'post/chat/user/send-message'
-      this.send(apiUrl, 'post', this.newMessage).then(resp => {
-        this.newMessage.text = ''
-        this.saveResponse(resp)
-        this.getUserPersonalMessages(this.selectUser)
-      })
-    },
-
-    checkUserRole () {
-      const role = this.store('role')
-      if (role === 3) {
-        this.$router.push('/')
-      }
     }
-  },
-
-  mounted: function () {
-    setInterval(() => {
-      if (this.selectUserId) {
-        this.getUserPersonalMessages(this.selectUser)
-      }
-    }, 4000)
-  }
-}
 </script>
 
 <style>
@@ -249,17 +251,17 @@ export default {
     }
 
     .left-users-panel {
-        background: #f5f2eb;
+        background: ghostwhite;
         width: 30%;
     }
 
     .center-messages-panel {
-        background: cornflowerblue;
+        background: white;
         width: 50%;
     }
 
     .right-tasks-panel {
-        background: #e5f0ea;
+        background: ghostwhite;
         width: 20%;
     }
 
@@ -268,6 +270,7 @@ export default {
         font-style: italic;
         margin-bottom: 4px;
         height: 55px;
+        text-align: center;
     }
 
     /* контейнер пользователя */
@@ -277,7 +280,7 @@ export default {
         border: 1px gainsboro solid;
         margin-bottom: 8px;
         padding: 2px;
-        background: #00acc1;
+        background: gainsboro;
         cursor: pointer;
     }
 
@@ -316,7 +319,7 @@ export default {
     /*  start > контейнер сообщений */
 
     .message-container {
-        background: cornflowerblue;
+        background: white;
         border: 0px red solid;
         margin-top: 5px;
         padding: 2px;
@@ -326,20 +329,20 @@ export default {
     .my__message-box,
     .user__message-box {
         padding: 4px;
-        border-radius: 5px;
+        border-radius: 0px;
         border: 1px gainsboro solid;
-        box-shadow: 0 0 0 1px #ccc,
-        inset 0 0 0 1px #ccc;
+        /*box-shadow: 0 0 0 1px #ccc,*/
+        /*inset 0 0 0 1px #ccc;*/
     }
 
     .my__message-box {
-        background: royalblue;
+        background: white;
         text-align: left;
         margin-left: 20%;
     }
 
     .user__message-box {
-        background: darkslateblue;
+        background: white;
         text-align: left;
         margin-right: 20%;
 
@@ -396,9 +399,9 @@ export default {
     .selected_user_box {
         font-style: italic;
         padding: 3px;
-        color: orangered;
+        color: green;
         font-weight: bold;
-        background: #b0bec5;
+        background: white;
     }
 
 </style>

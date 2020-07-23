@@ -1,128 +1,171 @@
-<template><header class="header-area" style="border:0px red solid">
+<template>
+    <header class="header-area" style="border:0px red solid">
 
-    <div class="nikki-main-menu">
-        <div class="classy-nav-container breakpoint-off">
-            <div class="container-fluid">
-                <!-- Menu -->
-                <nav class="classy-navbar justify-content-between" id="nikkiNav">
+        <div class="nikki-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container-fluid">
+                    <!-- Menu -->
+                    <nav class="classy-navbar justify-content-between" id="nikkiNav">
 
-                    <router-link to="/" >
-                        <img src="/img/core-img/logo.png" alt="" >
-                    </router-link>
+                        <router-link to="/">
+                            <img src="/img/core-img/logo.png" alt="">
+                        </router-link>
 
-                    <div class="classy-navbar-toggler">
-                        <span class="navbarToggler"><span></span><span></span><span></span></span>
-                    </div>
-
-                    <div class="classy-menu">
-
-                        <div class="classycloseIcon">
-                            <div class="cross-wrap"> <span class="top"></span><span class="bottom"></span> </div>
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
                         </div>
 
-                        <div class="classynav" style="border:0px green solid;" >
-                            <ul style="display: contents;" >
+                        <div class="classy-menu">
 
-                                <slot name="top-menu"></slot>
-
-                                <template v-if="page_role == 2" ><!--- Performer --->
-
-                                    <li>
-                                        <router-link to="/page/performer">Документы</router-link>
-                                    </li>
-
-                                    <li>
-                                        <router-link to="/page/create/object">Создание объектов</router-link>
-                                    </li>
-
-                                    <li>
-                                        <router-link to="/page/chat">Чат сообщений </router-link>
-                                    </li>
-
-                                </template>
-                                <template v-else-if="page_role == 3" ><!--- Employee ------>
-
-                                </template>
-                                <template v-else-if="page_role == 4" ><!--- CompanyUser --->
-                                    <li>
-                                        <router-link to="/page/chat">Чат сообщений </router-link>
-                                    </li>
-                                </template>
-
-                            </ul>
-
-
-                            <div class="my-divider" >0</div>
-
-                            <div class="top-social-info">
-                                <router-link to="/page/profile" style="font-style: italic">
-                                    <v-icon left color="green">mdi-account</v-icon> {{userName}}
-                                </router-link>
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
                             </div>
 
-                            <div class="my-divider" >0</div>
+                            <div class="classynav" style="border:0px green solid;">
+                                <ul style="display: contents;">
 
-                            <div class="top-social-info">
-                                <v-btn icon @click="storeClear()">
-                                   <v-icon>mdi-home-export-outline</v-icon>
-                                </v-btn>
-                                <!--<a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>-->
-                                <!--<a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>-->
+                                    <slot name="top-menu"></slot>
+
+                                    <template v-if="page_role == 2"><!--- Performer --->
+
+                                        <li class="li-route-link-item"
+                                            id="page-performer" >
+                                            <router-link to="/page/performer" >Документы</router-link>
+                                        </li>
+                                        <li class="li-route-link-item"
+                                            id="page-create-object" >
+                                            <router-link to="/page/create/object" >Создание объектов</router-link>
+                                        </li>
+
+
+                                    </template>
+                                    <template v-else-if="page_role == 3"><!--- Employee ------>
+
+                                    </template>
+                                    <template v-else-if="page_role == 4"><!--- CompanyUser --->
+                                        <li class="li-route-link-item"
+                                            id="page-company" >
+                                            <router-link to="/page/company"> Документы </router-link>
+                                        </li>
+                                    </template>
+
+                                    <template v-if="(page_role == 2) || (page_role == 4)"><!--- Employee ------>
+                                        <!--<li class="li-route-link-item"-->
+                                            <!--id="page-chat" >-->
+                                            <!--<router-link to="/page/chat">Чат сообщений </router-link>-->
+                                        <!--</li>-->
+                                    </template>
+
+                                </ul>
+
+                                <div class="my-divider">0</div>
+
+                                <div class="top-social-info">
+                                    <router-link to="/page/profile" style="font-style: italic">
+                                        <v-icon left color="green">mdi-account</v-icon>
+                                        {{userName}}
+                                    </router-link>
+                                </div>
+
+                                <div class="my-divider">0</div>
+
+                                <div class="top-social-info">
+
+                                    <v-btn icon @click="storeClear()">
+                                        <v-icon>mdi-home-export-outline</v-icon>
+                                    </v-btn>
+
+                                    <!--<a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>-->
+                                    <!--<a href="#" data-toggle="tooltip" data-placement="bottom" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>-->
+                                </div>
+
                             </div>
-
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
 
-</header></template>
+    </header>
+</template>
 
 <script>
 
-export default {
+    export default {
 
-  name  : "TopHeader",
-  props : ['page_role'],
-  data: () => ({
-      userId : 0,
-  }),
-  created() {
-      this.userId = this.store('role');
-      this.setRole();
-      this.setUserName();
-      this.checkUserRole();
-  },
+        name: "TopHeader",
+        props: ['page_role'],
+        data: () => ({
+            userId: 0,
+        }),
+        created() {
+            this.userId = this.store('role');
+            this.setRole();
+            this.setUserName();
+            this.checkUserRole();
+        },
 
-  methods : {
-      checkUserRole() {
+        methods: {
+            checkUserRole() {
 
-          if(!this.page_role)
-              return;
+                if (!this.page_role)
+                    return;
 
-          const currentRole = this.store('role');
-          if(!currentRole) {
-              this.authPageRedirect();
-          }
+                const currentRole = this.store('role');
+                if (!currentRole) {
+                    this.authPageRedirect();
+                }
 
-          if(currentRole != this.page_role) {
-              this.$router.push('/');
-          }
-      }
-  },
+                if (currentRole != this.page_role) {
+                    this.$router.push('/');
+                }
+            },
 
-};
+            routerLinkActive() {
+                const path = location.pathname;
+                const url = this.$router.app._route.path;
+                const r = path.indexOf(url);
+
+                this.htmlElemListRender('.li-route-link-item a', elem => {
+                    if(elem['style'])
+                        elem['style']['color'] = '#1976d2;';
+                });
+
+                if(r != -1) {
+                    const re = /\//gi;
+                    let elemId = url.replace(re, '-');
+                    elemId = elemId.slice(1);
+                    // elemId = 'page-create-object';
+                    let el = document.querySelector('#' + elemId + ' a');
+                    el.style.color = 'red';
+                }
+            },
+
+        },
+
+        mounted() {
+            this.routerLinkActive()
+        },
+
+    };
 </script>
 
-<style >
-     .topMenuLink {
-       text-decoration: none; font-weight:bold; color:green
-     }
+<style>
+    .topMenuLink {
+        text-decoration: none;
+        font-weight: bold;
+        color: green
+    }
 
-     .my-divider {
-         width: 1px;
-         border: 1px solid #ebebeb; color:white; margin:0px 15px 0px 15px;
-     }
-    
+    .my-divider {
+        width: 1px;
+        border: 1px solid #ebebeb;
+        color: white;
+        margin: 0px 15px 0px 15px;
+    }
+
+    .router-link-active-class {
+        color:red;
+    }
+
 </style>
